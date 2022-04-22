@@ -21,7 +21,7 @@ class FirstFragment : Fragment(),EasyPermissions.PermissionCallbacks {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
@@ -30,14 +30,16 @@ class FirstFragment : Fragment(),EasyPermissions.PermissionCallbacks {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val permissions = arrayListOf<String>()
-        permissions.add(android.Manifest.permission.ACCESS_COARSE_LOCATION)
-        permissions.add(android.Manifest.permission.ACCESS_FINE_LOCATION)
-        if(EasyPermissions.hasPermissions(requireContext(),permissions.toString())){
+        val permissions = arrayOf(
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        )
+
+        if (EasyPermissions.hasPermissions(requireContext(), *permissions)){
             gotoNext()
         }
         binding.btnPerm.setOnClickListener {
-        EasyPermissions.requestPermissions(this,"Allow Permission", 12,permissions.toString())
+            EasyPermissions.requestPermissions(this, "Allow Permission", 12, *permissions)
         }
     }
 
@@ -66,7 +68,7 @@ class FirstFragment : Fragment(),EasyPermissions.PermissionCallbacks {
         AlertDialog.Builder(requireContext())
             .setTitle("PERMISSION REQUIRED!!")
             .setMessage("App won't run until the location permission is granted.")
-            .setPositiveButton("Retry",DialogInterface.OnClickListener { dialogInterface, i ->  })
+            .setPositiveButton("Retry", DialogInterface.OnClickListener { _, _ ->  })
             .create()
             .show()
     }
